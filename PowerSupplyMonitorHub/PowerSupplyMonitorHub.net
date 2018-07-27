@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source G:\Projekte\RGBCeilingLamp\PowerSupplyMonitor\PowerSupplyMonitorHub\PowerSupplyMonitorHub.sch)
-    (date "27/07/2018 01:01:43")
+    (date "27/07/2018 04:07:34")
     (tool "Eeschema (5.0.0)")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -150,7 +150,7 @@
       (tstamp 5B5D8603))
     (comp (ref U2)
       (value PCF8575)
-      (footprint Package_SO:SSOP-24_5.3x8.2mm_P0.65mm)
+      (footprint Package_SO:SOIC-24W_7.5x15.4mm_P1.27mm)
       (datasheet http://www.nxp.com/documents/data_sheet/PCF8575.pdf)
       (fields
         (field (name BOM) "NXP PCF8575TS/1,112")
