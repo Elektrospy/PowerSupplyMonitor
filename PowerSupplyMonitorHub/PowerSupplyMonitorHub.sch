@@ -2899,6 +2899,7 @@ F 3 "" H 1400 6500 50  0001 C CNN
 	1    1400 6500
 	1    0    0    -1  
 $EndComp
+NoConn ~ 4750 5800
 Wire Bus Line
 	1450 3350 1950 3350
 Wire Bus Line
