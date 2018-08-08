@@ -1,4 +1,4 @@
-# I2C Powersupply Monitor Hub
+# I2C Powersupply Monitor Hub [![HitCount](http://hits.dwyl.com/Elektrospy/PowerSupplyMonitor.svg)](http://hits.dwyl.com/Elektrospy/PowerSupplyMonitor)
 
 This repository contains the schematics and sourcecode for the I2C powersupply monitor hub.
 
