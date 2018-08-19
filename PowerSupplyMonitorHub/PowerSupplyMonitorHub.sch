@@ -479,19 +479,8 @@ Wire Wire Line
 	5950 4950 5950 4850
 Entry Wire Line
 	4700 4100 4800 4200
-$Comp
-L Device:R R22
-U 1 1 5B62100B
-P 4450 3550
-F 0 "R22" V 4550 3450 50  0000 L CNN
-F 1 "220" V 4450 3450 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 4380 3550 50  0001 C CNN
-F 3 "~" H 4450 3550 50  0001 C CNN
-	1    4450 3550
-	1    0    0    -1  
-$EndComp
 Entry Wire Line
-	4350 3900 4450 4000
+	4450 3900 4550 4000
 Entry Wire Line
 	4050 3900 4150 4000
 Wire Wire Line
@@ -608,19 +597,8 @@ F 3 "~" H 5050 3550 50  0001 C CNN
 $EndComp
 Entry Wire Line
 	5900 4100 6000 4200
-$Comp
-L Device:R R24
-U 1 1 5B63D915
-P 5650 3550
-F 0 "R24" V 5750 3450 50  0000 L CNN
-F 1 "220" V 5650 3450 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 5580 3550 50  0001 C CNN
-F 3 "~" H 5650 3550 50  0001 C CNN
-	1    5650 3550
-	1    0    0    -1  
-$EndComp
 Entry Wire Line
-	5550 3900 5650 4000
+	5650 3900 5750 4000
 Entry Wire Line
 	5250 3900 5350 4000
 Wire Wire Line
@@ -737,19 +715,8 @@ F 3 "~" H 6250 3550 50  0001 C CNN
 $EndComp
 Entry Wire Line
 	7100 4100 7200 4200
-$Comp
-L Device:R R26
-U 1 1 5B64175B
-P 6850 3550
-F 0 "R26" V 6950 3450 50  0000 L CNN
-F 1 "220" V 6850 3450 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 6780 3550 50  0001 C CNN
-F 3 "~" H 6850 3550 50  0001 C CNN
-	1    6850 3550
-	1    0    0    -1  
-$EndComp
 Entry Wire Line
-	6750 3900 6850 4000
+	6850 3900 6950 4000
 Entry Wire Line
 	6450 3900 6550 4000
 Wire Wire Line
@@ -875,19 +842,8 @@ F 3 "" H 7850 3400 50  0001 C CNN
 	1    7850 3400
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R28
-U 1 1 5B64CAE6
-P 8050 3550
-F 0 "R28" V 8150 3450 50  0000 L CNN
-F 1 "220" V 8050 3450 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 7980 3550 50  0001 C CNN
-F 3 "~" H 8050 3550 50  0001 C CNN
-	1    8050 3550
-	1    0    0    -1  
-$EndComp
 Entry Wire Line
-	7950 3900 8050 4000
+	8050 3900 8150 4000
 Entry Wire Line
 	7650 3900 7750 4000
 Wire Wire Line
@@ -1013,19 +969,8 @@ F 3 "" H 9050 3400 50  0001 C CNN
 	1    9050 3400
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R30
-U 1 1 5B652E68
-P 9250 3550
-F 0 "R30" V 9350 3450 50  0000 L CNN
-F 1 "220" V 9250 3450 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 9180 3550 50  0001 C CNN
-F 3 "~" H 9250 3550 50  0001 C CNN
-	1    9250 3550
-	1    0    0    -1  
-$EndComp
 Entry Wire Line
-	9150 3900 9250 4000
+	9250 3900 9350 4000
 Entry Wire Line
 	8850 3900 8950 4000
 Wire Wire Line
@@ -1056,23 +1001,23 @@ Entry Wire Line
 	3750 4350 3850 4450
 Text Label 4050 3650 3    50   ~ 0
 RC_0
-Text Label 4350 3650 3    50   ~ 0
+Text Label 4450 3650 3    50   ~ 0
 DC_0
 Text Label 5250 3650 3    50   ~ 0
 RC_1
-Text Label 5550 3650 3    50   ~ 0
+Text Label 5650 3650 3    50   ~ 0
 DC_1
 Text Label 6450 3650 3    50   ~ 0
 RC_2
-Text Label 6750 3650 3    50   ~ 0
+Text Label 6850 3650 3    50   ~ 0
 DC_2
-Text Label 7950 3650 3    50   ~ 0
+Text Label 8050 3650 3    50   ~ 0
 DC_3
 Text Label 7650 3650 3    50   ~ 0
 RC_3
 Text Label 8850 3650 3    50   ~ 0
 RC_4
-Text Label 9150 3650 3    50   ~ 0
+Text Label 9250 3650 3    50   ~ 0
 DC_4
 Text Label 3950 4600 3    50   ~ 0
 DC_0
@@ -1198,14 +1143,6 @@ F 3 "" H 5350 5800 50  0001 C CNN
 	1    5350 5800
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4350 3900 4350 3400
-Wire Wire Line
-	5550 3900 5550 3400
-Wire Wire Line
-	6750 3900 6750 3400
-Wire Wire Line
-	9150 3400 9150 3900
 Text Label 9300 800  0    50   ~ 0
 LINK_4
 $Comp
@@ -1231,17 +1168,6 @@ F 3 "" H 3850 3700 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5V #PWR032
-U 1 1 5B5FB505
-P 4450 3700
-F 0 "#PWR032" H 4450 3550 50  0001 C CNN
-F 1 "+5V" H 4465 3873 50  0000 C CNN
-F 2 "" H 4450 3700 50  0001 C CNN
-F 3 "" H 4450 3700 50  0001 C CNN
-	1    4450 3700
-	-1   0    0    1   
-$EndComp
-$Comp
 L power:+5V #PWR039
 U 1 1 5B5FB56A
 P 5050 3700
@@ -1250,17 +1176,6 @@ F 1 "+5V" H 5065 3873 50  0000 C CNN
 F 2 "" H 5050 3700 50  0001 C CNN
 F 3 "" H 5050 3700 50  0001 C CNN
 	1    5050 3700
-	-1   0    0    1   
-$EndComp
-$Comp
-L power:+5V #PWR033
-U 1 1 5B5FB5CF
-P 5650 3700
-F 0 "#PWR033" H 5650 3550 50  0001 C CNN
-F 1 "+5V" H 5665 3873 50  0000 C CNN
-F 2 "" H 5650 3700 50  0001 C CNN
-F 3 "" H 5650 3700 50  0001 C CNN
-	1    5650 3700
 	-1   0    0    1   
 $EndComp
 $Comp
@@ -1275,17 +1190,6 @@ F 3 "" H 6250 3700 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5V #PWR034
-U 1 1 5B5FB6F5
-P 6850 3700
-F 0 "#PWR034" H 6850 3550 50  0001 C CNN
-F 1 "+5V" H 6865 3873 50  0000 C CNN
-F 2 "" H 6850 3700 50  0001 C CNN
-F 3 "" H 6850 3700 50  0001 C CNN
-	1    6850 3700
-	-1   0    0    1   
-$EndComp
-$Comp
 L power:+5V #PWR043
 U 1 1 5B5FB7B6
 P 7450 3700
@@ -1297,17 +1201,6 @@ F 3 "" H 7450 3700 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L power:+5V #PWR035
-U 1 1 5B5FB81B
-P 8050 3700
-F 0 "#PWR035" H 8050 3550 50  0001 C CNN
-F 1 "+5V" H 8065 3873 50  0000 C CNN
-F 2 "" H 8050 3700 50  0001 C CNN
-F 3 "" H 8050 3700 50  0001 C CNN
-	1    8050 3700
-	-1   0    0    1   
-$EndComp
-$Comp
 L power:+5V #PWR045
 U 1 1 5B5FBB52
 P 8650 3700
@@ -1316,17 +1209,6 @@ F 1 "+5V" H 8665 3873 50  0000 C CNN
 F 2 "" H 8650 3700 50  0001 C CNN
 F 3 "" H 8650 3700 50  0001 C CNN
 	1    8650 3700
-	-1   0    0    1   
-$EndComp
-$Comp
-L power:+5V #PWR036
-U 1 1 5B5FBBB7
-P 9250 3700
-F 0 "#PWR036" H 9250 3550 50  0001 C CNN
-F 1 "+5V" H 9265 3873 50  0000 C CNN
-F 2 "" H 9250 3700 50  0001 C CNN
-F 3 "" H 9250 3700 50  0001 C CNN
-	1    9250 3700
 	-1   0    0    1   
 $EndComp
 $Comp
@@ -2757,14 +2639,6 @@ F 3 "" H 7800 4550 50  0001 C CNN
 	1    7800 4550
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	9150 3400 9050 3400
-Connection ~ 9050 3400
-Wire Wire Line
-	7950 3900 7950 3400
-Wire Wire Line
-	7850 3400 7950 3400
-Connection ~ 7850 3400
 $Comp
 L power:GND #PWR042
 U 1 1 5B7A499A
@@ -2776,13 +2650,6 @@ F 3 "" H 6650 3400 50  0001 C CNN
 	1    6650 3400
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	6650 3400 6750 3400
-Connection ~ 6650 3400
-Wire Wire Line
-	5450 3400 5550 3400
-Wire Wire Line
-	4250 3400 4350 3400
 $Comp
 L power:GND #PWR040
 U 1 1 5B836707
@@ -2794,7 +2661,6 @@ F 3 "" H 5450 3400 50  0001 C CNN
 	1    5450 3400
 	1    0    0    -1  
 $EndComp
-Connection ~ 5450 3400
 $Comp
 L power:GND #PWR038
 U 1 1 5B8367C4
@@ -2806,7 +2672,6 @@ F 3 "" H 4250 3400 50  0001 C CNN
 	1    4250 3400
 	1    0    0    -1  
 $EndComp
-Connection ~ 4250 3400
 $Comp
 L Mechanical:MountingHole MH1
 U 1 1 5B8766B5
@@ -2900,6 +2765,16 @@ F 3 "" H 1400 6500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 NoConn ~ 4750 5800
+Wire Wire Line
+	4450 3900 4450 3400
+Wire Wire Line
+	9250 3900 9250 3400
+Wire Wire Line
+	8050 3900 8050 3400
+Wire Wire Line
+	6850 3900 6850 3400
+Wire Wire Line
+	5650 3900 5650 3400
 Wire Bus Line
 	1450 3350 1950 3350
 Wire Bus Line
