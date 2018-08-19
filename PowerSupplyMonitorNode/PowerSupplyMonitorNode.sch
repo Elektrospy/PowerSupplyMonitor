@@ -252,14 +252,6 @@ Text Label 4400 3850 0    50   ~ 0
 Text Label 4400 3350 0    50   ~ 0
 -S
 Wire Wire Line
-	6850 3300 6650 3300
-Wire Wire Line
-	6650 3300 6650 3000
-Wire Wire Line
-	6850 3400 6550 3400
-Wire Wire Line
-	6550 3400 6550 2900
-Wire Wire Line
 	6450 3750 6450 2550
 Wire Wire Line
 	6450 3750 6850 3750
@@ -342,14 +334,12 @@ Wire Wire Line
 	5350 3300 4950 3300
 Wire Wire Line
 	5350 2900 6550 2900
-Connection ~ 6550 2900
 Wire Wire Line
 	6550 2900 6550 2550
 Wire Wire Line
 	5050 3000 6650 3000
 Wire Wire Line
 	5050 2600 5050 3000
-Connection ~ 6650 3000
 Wire Wire Line
 	6650 3000 6650 2550
 $Comp
@@ -607,4 +597,14 @@ F 3 "~" H 8000 2200 50  0001 C CNN
 	1    8000 2200
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6650 3000 6650 3300
+Wire Wire Line
+	6650 3300 6850 3300
+Connection ~ 6650 3000
+Wire Wire Line
+	6850 3400 6550 3400
+Wire Wire Line
+	6550 3400 6550 2900
+Connection ~ 6550 2900
 $EndSCHEMATC
