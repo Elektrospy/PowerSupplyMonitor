@@ -1,7 +1,5 @@
 // PCA9685-Arduino Simple Example
-
 #include <Wire.h> // i2c stuff
-
 #include <PCA9685.h> // pwm driver
 #include <PCF857X.h> // i/o gpioExpander
 
