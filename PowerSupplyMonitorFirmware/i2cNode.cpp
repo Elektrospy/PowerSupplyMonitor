@@ -1,34 +1,52 @@
-<<<<<<< HEAD
 #include "i2cNode.h"
 
-i2cNode::i2cNode() {
-	this->init();
+i2cNode::i2cNode():_numberOfAdcs(2) {
+	this->_init();
+    this->_numberOfProbes = 1000;
 }
 
-void i2cNode::init() {
-
+i2cNode::~i2cNode() {
+    if(this->_ads != nullptr) {
+        delete this->_ads;
+    }
 }
 
-void i2cNode::getValuesRaw() {
-  adc0 = ads->readADC_SingleEnded(0);
-  adc1 = ads->readADC_SingleEnded(1);
-  adc2 = ads->readADC_SingleEnded(2);
-  adc3 = ads->readADC_SingleEnded(3);
-=======
-#include "i2cNode.h"
-
-i2cNode::i2cNode() {
-	this->init();
+float i2cNode::getMilliAmpereForOutput(uint8_t currentOutputIndex) {
+    float milliAmpereValue = 0;
+    milliAmpereValue = this->_adcAvgList[currentOutputIndex];
+    return milliAmpereValue;
 }
 
-void i2cNode::init() {
-
+// Private methods
+void i2cNode::_init() {
+    // initiallize the milliampere averages
+    for(int i = 0; i < this->_numberOfProbes; i++) {
+        this->_getValuesRaw(); // get new raw adc values
+        for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; ++currentAdc) {
+            this->_adcAvgList[currentAdc] = this->_calculateMilliAmpereAverage(currentAdc);
+        }
+    }
 }
 
-void i2cNode::getValuesRaw() {
-  adc0 = ads->readADC_SingleEnded(0);
-  adc1 = ads->readADC_SingleEnded(1);
-  adc2 = ads->readADC_SingleEnded(2);
-  adc3 = ads->readADC_SingleEnded(3);
->>>>>>> 2d2e681bb18683e5003681a6c1010d6275da8069
+void i2cNode::_getValuesRaw() {
+    for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; ++currentAdc) {
+        this->_adcList[currentAdc] = _ads->readADC_SingleEnded(currentAdc);
+    }
+}
+
+void i2cNode::_getValueAmpere(uint8_t currentAdc) {
+    if(currentAdc < this->_numberOfAdcs && currentAdc > 0) {
+        ;
+    }
+}
+
+float i2cNode::_calculateMilliAmpereAverage(uint16_t currentAdcValue) {
+    float average = 0;
+
+    average = average + (.044 * currentAdcValue -3.78);
+    // 05A: (.0264 * currentAdc -13.51) 
+    // 20A: (.19 * currentAdc -25) 
+    // 30A. (.044 * currentAdc -3.78)
+    
+    return average;
 }
