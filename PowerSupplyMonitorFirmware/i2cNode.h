@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // i2cnode.h
 #ifndef I2CNODE_H
 #define I2CNODE_H
@@ -10,39 +9,20 @@ class i2cNode {
 public:
 	i2cNode();
 	~i2cNode();
-
-	void init();
-
-private:
-	Adafruit_ADS1015 *ads;
-	uint16_t adc0, adc1, adc2, adc3;
-
-	void getValuesRaw();
-	void getValuesAmpere();
-};
-
-=======
-// i2cnode.h
-#ifndef I2CNODE_H
-#define I2CNODE_H
-#include <Wire.h>
-#include <Adafruit_ADS1015.h>
-
-class i2cNode {
-	
-public:
-	i2cNode();
-	~i2cNode();
-
-	void init();
+	float getMilliAmpereForOutput(uint8_t);
 
 private:
-	Adafruit_ADS1015 *ads;
-	uint16_t adc0, adc1, adc2, adc3;
+	Adafruit_ADS1015 *_ads;
+	uint16_t _numberOfProbes;
+	uint16_t _adcList[4];
+	uint16_t _adcAvgList[4];
+	const uint8_t _numberOfAdcs;
 
-	void getValuesRaw();
-	void getValuesAmpere();
+	void _init();
+
+	void _getValuesRaw();
+	void _getValueAmpere(uint8_t);
+	float _calculateMilliAmpereAverage(uint16_t);
 };
 
->>>>>>> 2d2e681bb18683e5003681a6c1010d6275da8069
 #endif
