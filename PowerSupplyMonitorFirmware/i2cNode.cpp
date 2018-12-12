@@ -1,17 +1,24 @@
 #include "i2cNode.h"
+#include <cstddef>
 
-i2cNode::i2cNode():_numberOfAdcs(2) {
-	this->_init();
-    this->_numberOfProbes = 1000;
+i2cNode::i2cNode() {
+    this->_numberOfAdcs = 2;
+    this->_tcaPort = 0;
+}
+
+i2cNode::i2cNode(TI_TCA9548A *tca, uint8_t tcaPort) {
+    this->_numberOfAdcs = 2;
+    this->_tcaPort = tcaPort;
+    this->_tca = tca;
+    this->_init();
 }
 
 i2cNode::~i2cNode() {
-    if(this->_ads != nullptr) {
-        delete this->_ads;
-    }
+    ;
 }
 
-float i2cNode::getMilliAmpereForOutput(uint8_t currentOutputIndex) {
+float i2cNode::getAmpereForOutput(uint8_t currentOutputIndex=0) {
+    this->_tca->selectChannel(currentOutputIndex);
     float milliAmpereValue = 0;
     milliAmpereValue = this->_adcAvgList[currentOutputIndex];
     return milliAmpereValue;
@@ -19,34 +26,28 @@ float i2cNode::getMilliAmpereForOutput(uint8_t currentOutputIndex) {
 
 // Private methods
 void i2cNode::_init() {
+    this->_ads.begin();
+    this->_numberOfProbes = 20;
     // initiallize the milliampere averages
-    for(int i = 0; i < this->_numberOfProbes; i++) {
+    for(int currentProbe = 0; currentProbe < this->_numberOfProbes; currentProbe++) {
         this->_getValuesRaw(); // get new raw adc values
-        for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; ++currentAdc) {
-            this->_adcAvgList[currentAdc] = this->_calculateMilliAmpereAverage(currentAdc);
+        for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; currentAdc++) {
+            this->_adcAvgList[currentAdc] = this->_calculateAmpereAverage(currentAdc);
         }
     }
 }
 
 void i2cNode::_getValuesRaw() {
-    for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; ++currentAdc) {
-        this->_adcList[currentAdc] = _ads->readADC_SingleEnded(currentAdc);
+    for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; currentAdc++) {
+        this->_adcList[currentAdc] = _ads.readADC_SingleEnded(currentAdc);
     }
 }
 
-void i2cNode::_getValueAmpere(uint8_t currentAdc) {
-    if(currentAdc < this->_numberOfAdcs && currentAdc > 0) {
-        ;
-    }
-}
-
-float i2cNode::_calculateMilliAmpereAverage(uint16_t currentAdcValue) {
+float i2cNode::_calculateAmpereAverage(uint16_t currentAdcValue) {
     float average = 0;
-
-    average = average + (.044 * currentAdcValue -3.78);
-    // 05A: (.0264 * currentAdc -13.51) 
-    // 20A: (.19 * currentAdc -25) 
-    // 30A. (.044 * currentAdc -3.78)
-    
+    average = ((.044 * currentAdcValue -3.78) * 0.001);
+    // 05A: (.0264 * currentAdcValue -13.51) 
+    // 20A: (.19 * currentAdcValue -25) 
+    // 30A. (.044 * currentAdcValue -3.78)
     return average;
 }
