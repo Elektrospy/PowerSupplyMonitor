@@ -13,6 +13,7 @@ public:
 	i2cNode(TI_TCA9548A *tca, uint8_t tcaPort);
 	~i2cNode();
 	float getAmpereForOutput(uint8_t);
+	uint16_t getRawInput(uint8_t);
 
 private:
 	Adafruit_ADS1015 _ads;
@@ -26,7 +27,8 @@ private:
 	void _init();
 
 	void _getValuesRaw();
-	float _calculateAmpereAverage(uint16_t);
+	float _calculateAmpereAverage();
+	float _calculateAmpereFromRaw(uint16_t);
 };
 
 #endif
