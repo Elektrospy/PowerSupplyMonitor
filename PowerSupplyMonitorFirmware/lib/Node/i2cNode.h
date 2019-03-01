@@ -16,18 +16,18 @@ public:
 	uint16_t getRawInput(uint8_t);
 
 private:
-	Adafruit_ADS1015 _ads;
 	uint16_t _numberOfProbes;
-	uint16_t _adcList[4];
-	uint16_t _adcAvgList[4];
+	uint16_t _adcListRaw[4];
+	uint16_t _adcListAmpere[4];
 	uint8_t _numberOfAdcs;
 	uint8_t _tcaPort;
+	Adafruit_ADS1015 _ads;
 	TI_TCA9548A *_tca;
 
 	void _init();
 
-	void _getValuesRaw();
-	float _calculateAmpereAverage();
+	void _updateRawValues();
+	uint16_t _getRaw(uint8_t);
 	float _calculateAmpereFromRaw(uint16_t);
 };
 
