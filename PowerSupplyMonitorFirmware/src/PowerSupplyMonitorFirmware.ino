@@ -3,17 +3,15 @@
 #include <TI_TCA9548A.h>
 #include "i2cNode.h"
 
-#define DEBUG false
-
 // Arduino 328p, SDA: A4, SCL: A5
 // ESP8266, SDA: D1, SCL: D2
 #define PIN_SDA D1
 #define PIN_SCL D2
 
 const uint8_t numberOfNodes=5;
+int cycleCount = 0;
 
 TI_TCA9548A nodeMuxer(&Wire);
-Adafruit_ADS1015 ads;
 i2cNode i2cNodeList[numberOfNodes];
 
 void initNodes() {
@@ -30,24 +28,12 @@ void setup() {
 
     nodeMuxer.setBaseChannelMask(0x1F); // 0001 1111 Enable Channel 0-4
     nodeMuxer.selectChannel(0);
-    ads.begin();
 
     // init nodes
     initNodes();
 }
 
-int cycleCount = 0;
-
 void loop() {
-#if DEBUG
-	Serial.print("Node #");
-	Serial.print(0);
-	Serial.print(" A:");
-	Serial.print(ads.readADC_SingleEnded(0));
-    Serial.print(" , B:");
-	Serial.println(ads.readADC_SingleEnded(1));
-	delay(1000);
-#else
     cycleCount++;
     for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
         Serial.print("Node #");
@@ -64,5 +50,4 @@ void loop() {
     Serial.print("===============:");
     Serial.println(cycleCount);
     delay(500);
-#endif
 }

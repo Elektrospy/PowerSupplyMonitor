@@ -17,45 +17,44 @@ i2cNode::~i2cNode() {
     ;
 }
 
-float i2cNode::getAmpereForOutput(uint8_t currentOutputIndex=0) {
-    this->_tca->selectChannel(currentOutputIndex);
-    this->_calculateAmpereAverage();
-    return this->_adcAvgList[currentOutputIndex];
+float i2cNode::getAmpereForOutput(uint8_t adcIndex=0) {
+    this->getRawInput(adcIndex);
+    this->_calculateAmpereFromRaw(this->_adcListRaw[adcIndex]);
+    return this->_adcListAmpere[adcIndex];
 }
 
-uint16_t i2cNode::getRawInput(uint8_t inputIndex=0) {
-    return _ads.readADC_SingleEnded(inputIndex);
+uint16_t i2cNode::getRawInput(uint8_t adcIndex=0) {
+    this->_updateRawValues();
+    return this->_adcListRaw[adcIndex];
 }
 
 
 // Private methods
 void i2cNode::_init() {
+    this->_tca->selectChannel(this->_tcaPort);
+    Adafruit_ADS1015 adsNew;
+    this->_ads = adsNew;
     this->_ads.begin();
-    this->_numberOfProbes = 20;
-    // initiallize the milliampere averages
-    for(int currentProbe = 0; currentProbe < this->_numberOfProbes; currentProbe++) {
-        this->_calculateAmpereAverage();
-    }
+    // initiallize the milliampere values
+    this->_updateRawValues();
 }
 
-void i2cNode::_getValuesRaw() {
-    for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; currentAdc++) {
-        this->_adcList[currentAdc] = _ads.readADC_SingleEnded(currentAdc);
-    }
+uint16_t i2cNode::_getRaw(uint8_t adcIndex) {
+    this->_tca->selectChannel(this->_tcaPort);
+    return this->_ads.readADC_SingleEnded(adcIndex);
 }
 
-float i2cNode::_calculateAmpereAverage() {
-    this->_getValuesRaw(); // get new raw adc values
+void i2cNode::_updateRawValues() {
     for(uint8_t currentAdc=0; currentAdc < this->_numberOfAdcs; currentAdc++) {
-        this->_adcAvgList[currentAdc] = this->_calculateAmpereFromRaw(currentAdc);
+        this->_adcListRaw[currentAdc] = this->_getRaw(currentAdc);
     }
 }
 
 float i2cNode::_calculateAmpereFromRaw(uint16_t currentAdcValue) {
     float ampere = 0;
-    ampere = ((.044 * currentAdcValue -3.78) * 0.001);
     // 05A: (.0264 * currentAdcValue -13.51) 
     // 20A: (.19 * currentAdcValue -25) 
     // 30A. (.044 * currentAdcValue -3.78)
+    ampere = ((.044 * currentAdcValue -3.78) * 0.001);
     return ampere;
 }
