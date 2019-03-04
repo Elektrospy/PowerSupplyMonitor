@@ -1,53 +1,68 @@
 #include <Wire.h> // i2c stuff
-#include <TwoWireMux.h>
-#include <TI_TCA9548A.h>
 #include "i2cNode.h"
 
 // Arduino 328p, SDA: A4, SCL: A5
 // ESP8266, SDA: D1, SCL: D2
 #define PIN_SDA D1
 #define PIN_SCL D2
-
-const uint8_t numberOfNodes=5;
+// tca default address
+#define TCAADDR 0x70
+// number of max i2c adc used channels
+const uint8_t adsChannels = 4;
+// number of max connected i2c nodes
+const uint8_t numberOfNodes = 5;
+// debug cycle counter
 int cycleCount = 0;
 
-TI_TCA9548A nodeMuxer(&Wire);
 i2cNode i2cNodeList[numberOfNodes];
 
 void initNodes() {
 	for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
-		i2cNodeList[currentNode] = i2cNode(&nodeMuxer, currentNode);
+		i2cNodeList[currentNode] = i2cNode(currentNode);
 	}
 }
 
+void tcaselect(uint8_t i) {
+    if (i > 7) {
+        return;
+    }
+    Wire.beginTransmission(TCAADDR);
+    Wire.write(1 << i);
+    Wire.endTransmission();
+}
+
+
 void setup() {
     Serial.begin(115200);
-
-    Wire.begin(PIN_SDA, PIN_SCL); // Wire must be started first
-    Wire.setClock(400000); // Supported baud rates are 100kHz, 400kHz, and 1000kHz
-
-    nodeMuxer.setBaseChannelMask(0x1F); // 0001 1111 Enable Channel 0-4
-    nodeMuxer.selectChannel(0);
-
+    // init i2c wire bus
+    Wire.begin(PIN_SDA, PIN_SCL);
+     // Supported baud rates are 100kHz, 400kHz, and 1000kHz
+    Wire.setClock(400000);
+    // set tca to start input
+    tcaselect(0);
     // init nodes
     initNodes();
 }
 
-void loop() {
+void debugNodePrint() {
     cycleCount++;
     for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
+        tcaselect(currentNode);
         Serial.print("Node #");
         Serial.print(currentNode);
-        Serial.print(" A:");
-        Serial.print(i2cNodeList[currentNode].getRawInput(0));
-        Serial.print(" B:");
-        Serial.print(i2cNodeList[currentNode].getRawInput(1));
-        Serial.print(" C:");
-        Serial.print(i2cNodeList[currentNode].getRawInput(2));
-        Serial.print(" D:");
-        Serial.println(i2cNodeList[currentNode].getRawInput(3));
+        for(uint8_t currentChannel=0; currentChannel < adsChannels; currentChannel++) {
+            Serial.print(" Ch");
+            Serial.print(currentChannel);
+            Serial.print(":");
+            Serial.print(i2cNodeList[currentNode].getRawInput(currentChannel));
+        }
+        Serial.println("");
     }
     Serial.print("===============:");
     Serial.println(cycleCount);
     delay(500);
 }
+
+void loop() {
+    debugNodePrint();
+}    
