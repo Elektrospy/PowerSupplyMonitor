@@ -24,11 +24,11 @@ uint16_t i2cNode::getRawInput(uint8_t adcIndex=0) {
     return this->_getRaw(adcIndex);
 }
 
-float i2cNode::getAmpereForOutput(uint8_t adcIndex=0) {
+float i2cNode::getAmpereForInput(uint8_t adcIndex=0) {
     return this->_calculateAmpereFromRaw(this->_getRaw(adcIndex));
 }
 
-uint16_t i2cNode::getMilliAmpereForOutput(uint8_t adcIndex=0) {
+uint16_t i2cNode::getMilliAmpereForInput(uint8_t adcIndex=0) {
     return this->_calculateMilliAmpereFromRaw(this->_getRaw(adcIndex));
 }
 
@@ -42,18 +42,20 @@ uint16_t i2cNode::_getRaw(uint8_t adcIndex) {
     return this->_ads.readADC_SingleEnded(adcIndex);
 }
 
-float i2cNode::_calculateAmpereFromRaw(uint16_t currentAdcValue) {
+float i2cNode::_calculateAmpereFromRaw(uint16_t adcValue=0) {
     float ampere = 0;
     const float ampereScaler = 0.001;
-    ampere = this->_calculateMilliAmpereFromRaw(currentAdcValue) * ampereScaler;
+    ampere = this->_calculateMilliAmpereFromRaw(adcValue) * ampereScaler;
     return ampere;
 }
 
-uint16_t i2cNode::_calculateMilliAmpereFromRaw(uint16_t currentAdcValue) {
-    uint16_t milliampere = 0;
-    // 05A: (.0264 * currentAdcValue -13.51) 
-    // 20A: (.19 * currentAdcValue -25) 
-    // 30A. (.044 * currentAdcValue -3.78)
-    milliampere = (.044 * currentAdcValue -3.78);
+float i2cNode::_calculateMilliAmpereFromRaw(uint16_t adcValue=0) {
+    float milliampere = 0;
+    // 05A: (.0264 * adcValue -13.51) 
+    // 20A: (.19 * adcValue -25) 
+    // 30A. (.044 * adcValue -3.78)
+    if(adcValue != 0) {
+        milliampere = (.044 * adcValue -3.78);
+    }
     return milliampere;
 }
