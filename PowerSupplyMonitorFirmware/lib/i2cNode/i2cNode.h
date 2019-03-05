@@ -10,9 +10,9 @@ public:
 	i2cNode(uint8_t tcaPort);
 	~i2cNode();
 	uint8_t getTcaPort();
-	uint16_t getRawInput(uint8_t);
-	float getAmpereForOutput(uint8_t);
-	uint16_t getMilliAmpereForOutput(uint8_t);
+	uint16_t getRawInput(uint8_t adcIndex);
+	float getAmpereForInput(uint8_t adcIndex);
+	uint16_t getMilliAmpereForInput(uint8_t adcIndex);
 
 private:
 	uint16_t _numberOfProbes;
@@ -21,9 +21,9 @@ private:
 	Adafruit_ADS1015 _ads;
 
 	void _init();
-	uint16_t _getRaw(uint8_t);
-	float _calculateAmpereFromRaw(uint16_t);
-	uint16_t _calculateMilliAmpereFromRaw(uint16_t);
+	uint16_t _getRaw(uint8_t adcIndex);
+	float _calculateAmpereFromRaw(uint16_t adcValue);
+	float _calculateMilliAmpereFromRaw(uint16_t adcValue);
 };
 
 #endif

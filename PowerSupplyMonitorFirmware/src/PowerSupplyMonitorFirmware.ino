@@ -54,7 +54,8 @@ void debugNodePrint() {
             Serial.print(" Ch");
             Serial.print(currentChannel);
             Serial.print(":");
-            Serial.print(i2cNodeList[currentNode].getRawInput(currentChannel));
+            //Serial.print(i2cNodeList[currentNode].getRawInput(currentChannel));
+            Serial.print(i2cNodeList[currentNode].getMilliAmpereForInput(currentChannel));
         }
         Serial.println("");
     }
