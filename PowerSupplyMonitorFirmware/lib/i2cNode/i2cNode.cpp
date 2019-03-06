@@ -20,6 +20,10 @@ uint8_t i2cNode::getTcaPort() {
     return this->_tcaPort;
 }
 
+uint8_t i2cNode::getAdcCount() {
+    return this->_numberOfAdcs;
+}
+
 uint16_t i2cNode::getRawInput(uint8_t adcIndex=0) {
     return this->_getRaw(adcIndex);
 }
@@ -28,7 +32,7 @@ float i2cNode::getAmpereForInput(uint8_t adcIndex=0) {
     return this->_calculateAmpereFromRaw(this->_getRaw(adcIndex));
 }
 
-uint16_t i2cNode::getMilliAmpereForInput(uint8_t adcIndex=0) {
+float i2cNode::getMilliAmpereForInput(uint8_t adcIndex=0) {
     return this->_calculateMilliAmpereFromRaw(this->_getRaw(adcIndex));
 }
 
