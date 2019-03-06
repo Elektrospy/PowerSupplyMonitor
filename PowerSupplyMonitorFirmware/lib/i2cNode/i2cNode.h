@@ -1,4 +1,3 @@
-// i2cnode.h
 #ifndef I2CNODE_H
 #define I2CNODE_H
 #include <Adafruit_ADS1015.h>
@@ -10,9 +9,10 @@ public:
 	i2cNode(uint8_t tcaPort);
 	~i2cNode();
 	uint8_t getTcaPort();
+	uint8_t getAdcCount();
 	uint16_t getRawInput(uint8_t adcIndex);
 	float getAmpereForInput(uint8_t adcIndex);
-	uint16_t getMilliAmpereForInput(uint8_t adcIndex);
+	float getMilliAmpereForInput(uint8_t adcIndex);
 
 private:
 	uint16_t _numberOfProbes;
