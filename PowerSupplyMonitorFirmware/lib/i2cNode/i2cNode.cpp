@@ -9,11 +9,14 @@ i2cNode::i2cNode() {
 i2cNode::i2cNode(uint8_t tcaPort) {
     this->_numberOfAdcs = 4;
     this->_tcaPort = tcaPort;
-    this->_init();
 }
 
 i2cNode::~i2cNode() {
     ;
+}
+
+void i2cNode::init() {
+    this->_ads.begin();
 }
 
 uint8_t i2cNode::getTcaPort() {
@@ -38,10 +41,6 @@ float i2cNode::getMilliAmpereForInput(uint8_t adcIndex=0) {
 
 
 // Private methods
-void i2cNode::_init() {
-    this->_ads.begin();
-}
-
 uint16_t i2cNode::_getRaw(uint8_t adcIndex) {
     return this->_ads.readADC_SingleEnded(adcIndex);
 }

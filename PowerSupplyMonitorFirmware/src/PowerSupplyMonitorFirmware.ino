@@ -5,17 +5,21 @@
 // ESP8266, SDA: D1, SCL: D2
 #define PIN_SDA D1
 #define PIN_SCL D2
-
+// debug print cycle counter
 int cycleCount = 0;
-
-i2cHub nodeHub = i2cHub(&Wire);
+// create i2cHub object, holding our i2cNodes
+i2cHub nodeHub = i2cHub();
+// prototype methods
+void debugNodePrint();
 
 void setup() {
     Serial.begin(115200);
     // init i2c wire bus
     Wire.begin(PIN_SDA, PIN_SCL);
-     // Supported baud rates are 100kHz, 400kHz, and 1000kHz
+    // Supported baud rates are 100kHz, 400kHz, and 1000kHz
     Wire.setClock(400000);
+    // init nodeHub
+    nodeHub.init();
 }
 
 void loop() {
