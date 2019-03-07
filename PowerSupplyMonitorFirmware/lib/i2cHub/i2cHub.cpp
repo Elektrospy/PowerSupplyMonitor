@@ -4,16 +4,21 @@
 i2cNode i2cNodeList[5];
 
 // public domain
-i2cHub::i2cHub(TwoWire *i2cBus) : TCAADDR(0x70), adsChannels(4), numberOfNodes(5) {
-    _i2cBus = i2cBus;
+i2cHub::i2cHub() : TCAADDR(0x70), adsChannels(4), numberOfNodes(5) {
+    initNodes();
     // set tca to start input
     tcaselect(0);
-    // init nodes
-    initNodes();
 }
 
 i2cHub::~i2cHub() {
     ;
+}
+
+void i2cHub::init() {
+    // init nodes
+    for(uint8_t currentNode=0; currentNode < this->numberOfNodes; currentNode++) {
+        i2cNodeList[currentNode].init();
+    }
 }
 
 uint8_t i2cHub::getNodeCount() {
@@ -30,7 +35,10 @@ uint8_t i2cHub::getNodeChannelCount(uint8_t nodeIndex) {
 
 float i2cHub::getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel) {
     float milliAmpere = 0.0;
+    // switch tca to current i2cNode port
+    tcaselect(i2cNodeList[currentNode].getTcaPort());
     if(currentChannel >= 0 && currentChannel < i2cNodeList[currentNode].getAdcCount()) {
+        // get milliampere values from current i2cNode adc channel
         milliAmpere = i2cNodeList[currentNode].getMilliAmpereForInput(currentChannel);
     }
     return milliAmpere;
@@ -48,7 +56,7 @@ void i2cHub::tcaselect(uint8_t port) {
     if (port > 7) {
         return;
     }
-    _i2cBus->beginTransmission(TCAADDR);
-    _i2cBus->write(1 << port);
-    _i2cBus->endTransmission();
+    Wire.beginTransmission(TCAADDR);
+    Wire.write(1 << port);
+    Wire.endTransmission();
 }
