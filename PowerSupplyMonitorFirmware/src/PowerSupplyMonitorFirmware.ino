@@ -35,7 +35,7 @@ void debugNodePrint() {
         Serial.printf("Node #%d", currentNode);
         const int adsChannels = nodeHub.getNodeChannelCount(currentNode);
         for(uint8_t currentChannel=0; currentChannel < adsChannels; currentChannel++) {
-            Serial.printf(" Ch%d:%f", currentChannel, nodeHub.getMilliAmpereForNode(currentNode, currentChannel));
+            Serial.printf(" Ch%d:%.2f", currentChannel, nodeHub.getMilliAmpereForNode(currentNode, currentChannel));
         }
         Serial.println("");
     }
