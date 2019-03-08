@@ -58,7 +58,7 @@ float i2cNode::_calculateMilliAmpereFromRaw(uint16_t adcValue=0) {
     // 20A: (.19 * adcValue -25) 
     // 30A. (.044 * adcValue -3.78)
     if(adcValue != 0) {
-        milliampere = (.044 * adcValue -3.78);
+        milliampere = (.044 * adcValue - 3.78);
     }
     return milliampere;
 }
