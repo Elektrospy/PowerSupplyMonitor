@@ -9,9 +9,9 @@ public:
 	i2cHub();
 	~i2cHub();
 	void init();
-	uint8_t getNodeCount();
-	uint8_t getNodeChannelCount(uint8_t nodeIndex);
-	float getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel);
+	const uint8_t getNodeCount();
+	const uint8_t getNodeChannelCount(uint8_t nodeIndex);
+	const float getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel);
 
 private:
 	// tca default address

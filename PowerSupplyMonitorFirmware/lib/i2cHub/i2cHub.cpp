@@ -21,11 +21,11 @@ void i2cHub::init() {
     }
 }
 
-uint8_t i2cHub::getNodeCount() {
+const uint8_t i2cHub::getNodeCount() {
     return this->numberOfNodes;
 }
 
-uint8_t i2cHub::getNodeChannelCount(uint8_t nodeIndex) {
+const uint8_t i2cHub::getNodeChannelCount(uint8_t nodeIndex) {
     uint8_t channelCount = 0;
     if(nodeIndex >= 0 && nodeIndex < this->numberOfNodes) {
         channelCount = i2cNodeList[nodeIndex].getAdcCount();
@@ -33,7 +33,7 @@ uint8_t i2cHub::getNodeChannelCount(uint8_t nodeIndex) {
     return channelCount;
 }
 
-float i2cHub::getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel) {
+const float i2cHub::getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel) {
     float milliAmpere = 0.0;
     // switch tca to current i2cNode port
     tcaselect(i2cNodeList[currentNode].getTcaPort());
