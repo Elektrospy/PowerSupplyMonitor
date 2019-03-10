@@ -2,6 +2,7 @@
 #define I2CHUB_H
 
 #include "i2cNode.h"
+#include <PCF857X.h>
 
 class i2cHub {
 	
@@ -22,6 +23,7 @@ private:
 	const uint8_t numberOfNodes;
 
 	void initNodes();
+	void initExpander();
 	void tcaselect(uint8_t port);
 };
 

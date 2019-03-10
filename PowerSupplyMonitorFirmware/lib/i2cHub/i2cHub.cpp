@@ -2,6 +2,7 @@
 
 // list of i2cnode objects
 i2cNode i2cNodeList[5];
+PCF857X expander;
 
 // public domain
 i2cHub::i2cHub() : TCAADDR(0x70), adsChannels(4), numberOfNodes(5) {
@@ -19,6 +20,7 @@ void i2cHub::init() {
     for(uint8_t currentNode=0; currentNode < this->numberOfNodes; currentNode++) {
         i2cNodeList[currentNode].init();
     }
+    initExpander();
 }
 
 const uint8_t i2cHub::getNodeCount() {
@@ -50,6 +52,34 @@ void i2cHub::initNodes() {
 	for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
 		i2cNodeList[currentNode] = i2cNode(currentNode);
     }
+}
+
+void i2cHub::initExpander() {
+    expander.begin(0x20);
+    // ports 0-9, node signals
+    expander.pinMode(0, OUTPUT);
+    expander.pinMode(1, INPUT_PULLUP);
+    expander.pinMode(2, OUTPUT);
+    expander.pinMode(3, INPUT_PULLUP);
+    expander.pinMode(4, OUTPUT);
+    expander.pinMode(5, INPUT_PULLUP);
+    expander.pinMode(6, OUTPUT);
+    expander.pinMode(7, INPUT_PULLUP);
+    expander.pinMode(8, OUTPUT);
+    expander.pinMode(9, INPUT_PULLUP);
+    // ports 10-15, node toggles & display trigger buttons
+    expander.pinMode(10, INPUT_PULLUP);
+    expander.pinMode(11, INPUT_PULLUP);
+    expander.pinMode(12, INPUT_PULLUP);
+    expander.pinMode(13, INPUT_PULLUP);
+    expander.pinMode(14, INPUT_PULLUP);
+    expander.pinMode(15, INPUT_PULLUP);
+    // set intial states
+    expander.digitalWrite(0, LOW);
+    expander.digitalWrite(2, LOW);
+    expander.digitalWrite(4, LOW);
+    expander.digitalWrite(6, LOW);
+    expander.digitalWrite(8, LOW);
 }
 
 void i2cHub::tcaselect(uint8_t port) {
