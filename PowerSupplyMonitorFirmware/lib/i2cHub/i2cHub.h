@@ -10,6 +10,7 @@ public:
 	i2cHub();
 	~i2cHub();
 	void init();
+	void run();
 	const uint8_t getNodeCount();
 	const uint8_t getNodeChannelCount(uint8_t nodeIndex);
 	const float getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel);
@@ -21,10 +22,15 @@ private:
 	const uint8_t adsChannels;
 	// number of max connected i2c nodes
 	const uint8_t numberOfNodes;
+	// timing stuff
+	unsigned long btnMillisPeriod;
+	unsigned long btnMillisStart;
+	unsigned long btnMillisLast;
 
 	void initNodes();
 	void initExpander();
 	void tcaselect(uint8_t port);
+	void runButtons();
 };
 
 #endif

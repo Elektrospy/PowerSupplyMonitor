@@ -6,6 +6,7 @@ PCF857X expander;
 
 // public domain
 i2cHub::i2cHub() : TCAADDR(0x70), adsChannels(4), numberOfNodes(5) {
+    this->btnMillisPeriod = 500;
     initNodes();
     // set tca to start input
     tcaselect(0);
@@ -21,6 +22,10 @@ void i2cHub::init() {
         i2cNodeList[currentNode].init();
     }
     initExpander();
+}
+
+void i2cHub::run() {
+    this->runButtons();
 }
 
 const uint8_t i2cHub::getNodeCount() {
@@ -89,4 +94,26 @@ void i2cHub::tcaselect(uint8_t port) {
     Wire.beginTransmission(TCAADDR);
     Wire.write(1 << port);
     Wire.endTransmission();
+}
+
+void i2cHub::runButtons() {
+    this->btnMillisLast = millis();
+    if(this->btnMillisLast - this->btnMillisStart >= this->btnMillisPeriod) {
+        if(expander.digitalRead(11)) {
+            expander.toggle(0);
+        }
+        if(expander.digitalRead(12)) {
+            expander.toggle(2);
+        }
+        if(expander.digitalRead(13)) {
+            expander.toggle(4);
+        }
+        if(expander.digitalRead(14)) {
+            expander.toggle(6);
+        }
+        if(expander.digitalRead(15)) {
+            expander.toggle(8);
+        }
+        this->btnMillisStart = this->btnMillisLast;
+    }
 }
