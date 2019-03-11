@@ -10,6 +10,10 @@ const uint32_t i2cClockSpeed = 400000;
 int cycleCount = 0;
 i2cHub nodeHub = i2cHub();
 
+unsigned long debugMillisPeriod = 1000;
+unsigned long debugMillisStart = 0;
+unsigned long debugMillisLast = 0;
+
 // prototype methods
 void debugNodePrint();
 
@@ -24,21 +28,25 @@ void setup() {
 }
 
 void loop() {
+    nodeHub.run();
     debugNodePrint();
 }    
 
 
 void debugNodePrint() {
-    const int numberOfNodes = nodeHub.getNodeCount();
-    cycleCount++;
-    for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
-        Serial.printf("Node #%d", currentNode);
-        const int adsChannels = nodeHub.getNodeChannelCount(currentNode);
-        for(uint8_t currentChannel=0; currentChannel < adsChannels; currentChannel++) {
-            Serial.printf(" Ch%d:%.2f", currentChannel, nodeHub.getMilliAmpereForNode(currentNode, currentChannel));
+    debugMillisLast = millis();
+    if(debugMillisLast - debugMillisStart >= debugMillisPeriod) {
+        const int numberOfNodes = nodeHub.getNodeCount();
+        cycleCount++;
+        for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
+            Serial.printf("Node #%d", currentNode);
+            const int adsChannels = nodeHub.getNodeChannelCount(currentNode);
+            for(uint8_t currentChannel=0; currentChannel < adsChannels; currentChannel++) {
+                Serial.printf(" Ch%d:%.2f", currentChannel, nodeHub.getMilliAmpereForNode(currentNode, currentChannel));
+            }
+            Serial.println("");
         }
-        Serial.println("");
+        Serial.printf("===============:%d\n", cycleCount);
+        debugMillisStart = debugMillisLast;
     }
-    Serial.printf("===============:%d\n", cycleCount);
-    delay(500);
 }
