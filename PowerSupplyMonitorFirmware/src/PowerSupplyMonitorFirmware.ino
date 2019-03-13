@@ -7,15 +7,17 @@
 #define PIN_SCL D2
 const unsigned long serialBautrate = 115200;
 const uint32_t i2cClockSpeed = 400000;
-int cycleCount = 0;
 i2cHub nodeHub = i2cHub();
-
-unsigned long debugMillisPeriod = 1000;
+const uint8_t numberOfNodes = nodeHub.getNodeCount();
+// debug print timing
+const unsigned long debugMillisPeriod = 1000;
 unsigned long debugMillisStart = 0;
 unsigned long debugMillisLast = 0;
+int cycleCount = 0;
 
 // prototype methods
 void debugNodePrint();
+void debugNodePowerSupplys();
 
 void setup() {
     Serial.begin(serialBautrate);
@@ -30,13 +32,13 @@ void setup() {
 void loop() {
     nodeHub.run();
     debugNodePrint();
+    debugNodePowerSupplys();
 }    
 
 
 void debugNodePrint() {
     debugMillisLast = millis();
     if(debugMillisLast - debugMillisStart >= debugMillisPeriod) {
-        const int numberOfNodes = nodeHub.getNodeCount();
         cycleCount++;
         for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
             Serial.printf("Node #%d", currentNode);
@@ -48,5 +50,28 @@ void debugNodePrint() {
         }
         Serial.printf("===============:%d\n", cycleCount);
         debugMillisStart = debugMillisLast;
+    }
+}
+
+uint8_t currentNodeSwitch = 0;
+unsigned long debugMillisSwitchPeriod = 1000;
+unsigned long debugMillisSwitchStart = 0;
+unsigned long debugMillisSwitchLast = 0;
+void debugNodePowerSupplys() {
+    debugMillisSwitchLast = millis();
+    if(debugMillisSwitchLast - debugMillisSwitchStart >= debugMillisSwitchPeriod) {
+        // reset power supplies to off
+        for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
+            nodeHub.deactivatePowerSupply(currentNode);
+        }
+        // activate new current powersupply
+        nodeHub.activatePowerSupply(currentNodeSwitch);
+        // count to next powersupply
+        if(currentNodeSwitch < numberOfNodes) {
+            currentNodeSwitch++;
+        } else {
+            currentNodeSwitch = 0;
+        }
+        debugMillisSwitchStart = debugMillisSwitchLast;
     }
 }

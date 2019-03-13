@@ -1,11 +1,15 @@
 #include "i2cHub.h"
 
-// list of i2cnode objects
-i2cNode i2cNodeList[5];
+const uint8_t numberOfNodes = 5;
+i2cNode i2cNodeList[numberOfNodes];
+const uint8_t pcfPwrOutput[numberOfNodes] = {0, 2, 4, 6, 8};
+const uint8_t pcfPwrInput[numberOfNodes] = {1, 3, 5, 7, 9};
+const uint8_t pcfPwrButton[numberOfNodes] = {11, 12, 13, 14, 15};
+const uint8_t pcfDisplayBtn = 10;
 PCF857X expander;
 
 // public domain
-i2cHub::i2cHub() : TCAADDR(0x70), adsChannels(4), numberOfNodes(5) {
+i2cHub::i2cHub() : TCAADDR(0x70), adsChannels(4), _numberOfNodes(numberOfNodes) {
     this->btnMillisPeriod = 500;
     initNodes();
     // set tca to start input
@@ -18,7 +22,7 @@ i2cHub::~i2cHub() {
 
 void i2cHub::init() {
     // init nodes
-    for(uint8_t currentNode=0; currentNode < this->numberOfNodes; currentNode++) {
+    for(uint8_t currentNode=0; currentNode < this->_numberOfNodes; currentNode++) {
         i2cNodeList[currentNode].init();
     }
     initExpander();
@@ -29,12 +33,12 @@ void i2cHub::run() {
 }
 
 const uint8_t i2cHub::getNodeCount() {
-    return this->numberOfNodes;
+    return this->_numberOfNodes;
 }
 
 const uint8_t i2cHub::getNodeChannelCount(uint8_t nodeIndex) {
     uint8_t channelCount = 0;
-    if(nodeIndex >= 0 && nodeIndex < this->numberOfNodes) {
+    if(nodeIndex >= 0 && nodeIndex < this->_numberOfNodes) {
         channelCount = i2cNodeList[nodeIndex].getAdcCount();
     }
     return channelCount;
@@ -51,6 +55,13 @@ const float i2cHub::getMilliAmpereForNode(uint8_t currentNode, uint8_t currentCh
     return milliAmpere;
 }
 
+const void i2cHub::activatePowerSupply(uint8_t nodeIndex) {
+    expander.digitalWrite(pcfPwrOutput[nodeIndex], 1);
+}
+
+const void i2cHub::deactivatePowerSupply(uint8_t nodeIndex) {
+    expander.digitalWrite(pcfPwrOutput[nodeIndex], 0);
+}
 
 // private methods
 void i2cHub::initNodes() {
@@ -62,29 +73,17 @@ void i2cHub::initNodes() {
 void i2cHub::initExpander() {
     expander.begin(0x20);
     // ports 0-9, node signals
-    expander.pinMode(0, OUTPUT);
-    expander.pinMode(1, INPUT_PULLUP);
-    expander.pinMode(2, OUTPUT);
-    expander.pinMode(3, INPUT_PULLUP);
-    expander.pinMode(4, OUTPUT);
-    expander.pinMode(5, INPUT_PULLUP);
-    expander.pinMode(6, OUTPUT);
-    expander.pinMode(7, INPUT_PULLUP);
-    expander.pinMode(8, OUTPUT);
-    expander.pinMode(9, INPUT_PULLUP);
-    // ports 10-15, node toggles & display trigger buttons
-    expander.pinMode(10, INPUT_PULLUP);
-    expander.pinMode(11, INPUT_PULLUP);
-    expander.pinMode(12, INPUT_PULLUP);
-    expander.pinMode(13, INPUT_PULLUP);
-    expander.pinMode(14, INPUT_PULLUP);
-    expander.pinMode(15, INPUT_PULLUP);
-    // set intial states
-    expander.digitalWrite(0, LOW);
-    expander.digitalWrite(2, LOW);
-    expander.digitalWrite(4, LOW);
-    expander.digitalWrite(6, LOW);
-    expander.digitalWrite(8, LOW);
+    for(uint8_t index=0; index < this->_numberOfNodes; index++) {
+        expander.pinMode(pcfPwrOutput[index], OUTPUT);
+        expander.pinMode(pcfPwrInput[index], INPUT_PULLUP);
+        expander.pinMode(pcfPwrButton[index], INPUT_PULLUP);
+    }
+    // display trigger button
+    expander.pinMode(pcfDisplayBtn, INPUT_PULLUP);
+    // set intial states for power supplies (OFF)
+    for(uint8_t index=0; index < this->_numberOfNodes; index++) {
+        expander.digitalWrite(pcfPwrOutput[index], LOW);
+    }
 }
 
 void i2cHub::tcaselect(uint8_t port) {
@@ -99,20 +98,10 @@ void i2cHub::tcaselect(uint8_t port) {
 void i2cHub::runButtons() {
     this->btnMillisLast = millis();
     if(this->btnMillisLast - this->btnMillisStart >= this->btnMillisPeriod) {
-        if(expander.digitalRead(11)) {
-            expander.toggle(0);
-        }
-        if(expander.digitalRead(12)) {
-            expander.toggle(2);
-        }
-        if(expander.digitalRead(13)) {
-            expander.toggle(4);
-        }
-        if(expander.digitalRead(14)) {
-            expander.toggle(6);
-        }
-        if(expander.digitalRead(15)) {
-            expander.toggle(8);
+        for(uint8_t index=0; index < this->_numberOfNodes; index++) {
+            if(expander.digitalRead(pcfPwrButton[index])) {
+                expander.toggle(pcfPwrOutput[index]);
+            }
         }
         this->btnMillisStart = this->btnMillisLast;
     }
