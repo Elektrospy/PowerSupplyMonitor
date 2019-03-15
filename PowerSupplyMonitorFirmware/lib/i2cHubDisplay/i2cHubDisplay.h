@@ -13,10 +13,10 @@ public:
 	~i2cHubDisplay();
 	void init();
 	void run();
+    void _frameHello(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y);
 
 private:
-    const int _frameCount;
-    void _frameHello(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y);
+
 };
 
 #endif

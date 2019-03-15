@@ -1,7 +1,7 @@
 #include <Wire.h> // i2c stuff
 #include "i2cHub.h"
 #include "i2cHubDebug.h"
-//#include "i2cHubDisplay.h"
+#include "i2cHubDisplay.h"
 
 #include "SSD1306Wire.h" //Display Bibliothek
 #include "OLEDDisplayUi.h" //Display Bibliothek
@@ -16,15 +16,27 @@ i2cHub nodeHub = i2cHub();
 i2cHubDebug nodeHubDebug = i2cHubDebug(&nodeHub);
 //i2cHubDisplay nodeHubDisplay = i2cHubDisplay(&nodeHub);
 
+
 SSD1306Wire  display(0x3c, PIN_SDA, PIN_SCL);
 OLEDDisplayUi ui ( &display );
-void helloFrame(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
-  display->setTextAlignment(TEXT_ALIGN_LEFT);
-  display->setFont(ArialMT_Plain_16);
-  display->drawString(0, 0, "Hello World!");
+
+void frameDashboard(OLEDDisplay *display, OLEDDisplayUiState* state, int16_t x, int16_t y) {
+    display->setTextAlignment(TEXT_ALIGN_LEFT);
+    display->setFont(ArialMT_Plain_10);
+    const int txtSpace = 10;
+
+    for(uint8_t currentNode=0; currentNode < nodeHub.getNodeCount(); currentNode++) {
+        char buffer[128];
+        sniprintf(buffer, sizeof(buffer), "%d: %05.0fmA %05.0fmA",
+            currentNode, 
+            nodeHub.getMilliAmpereForNode(currentNode, 2), 
+            nodeHub.getMilliAmpereForNode(currentNode, 3));
+        display->drawString(0, txtSpace * currentNode, buffer);
+    }
 }
-FrameCallback frames[] = { helloFrame };
-const int frameCount = 1;
+
+FrameCallback frames[] = { frameDashboard };
+const uint8_t frameCount = 1;
 
 // prototype methods
 void debugNodePrint();
@@ -38,16 +50,15 @@ void setup() {
     Wire.setClock(i2cClockSpeed);
     // init nodeHub for i2c usage
     nodeHub.init();
-
-    ui.setTargetFPS(60);
+    // i2c oled settings
+    ui.setTargetFPS(30);
     ui.setFrames(frames, frameCount);
     ui.init();
-    //display.flipScreenVertically();
 }
 
 void loop() {
     nodeHub.run();
     nodeHubDebug.debugNodePrint();
-    nodeHubDebug.debugNodePowerSupplys();
+    //nodeHubDebug.debugNodePowerSupplys();
     ui.update();
 }    
