@@ -2,10 +2,12 @@
 
 const uint8_t numberOfNodes = 5;
 i2cNode i2cNodeList[numberOfNodes];
-const uint8_t pcfPwrOutput[numberOfNodes] = {0, 2, 4, 6, 8};
+// pcf i2c expander configuration
 const uint8_t pcfPwrInput[numberOfNodes] = {1, 3, 5, 7, 9};
+const uint8_t pcfPwrOutput[numberOfNodes] = {0, 2, 4, 6, 8};
 const uint8_t pcfPwrButton[numberOfNodes] = {11, 12, 13, 14, 15};
 const uint8_t pcfDisplayBtn = 10;
+boolean pcfPwrOutputState[numberOfNodes] = {false, false, false, false, false};
 PCF857X expander;
 
 // public domain
@@ -42,6 +44,33 @@ const uint8_t i2cHub::getNodeChannelCount(uint8_t nodeIndex) {
         channelCount = i2cNodeList[nodeIndex].getAdcCount();
     }
     return channelCount;
+}
+
+const bool i2cHub::getInputState(uint8_t currentNode=0) {
+    bool inputState = true;
+    if(expander.digitalRead(pcfPwrInput[currentNode])) {
+        inputState = false;
+    }
+    return inputState;
+}
+
+const bool i2cHub::getOutputState(uint8_t currentNode=0) {
+    bool outputState = false;
+    if(expander.digitalRead(pcfPwrOutput[currentNode])) {
+        outputState = true;
+    }
+    return outputState;
+}
+
+const float i2cHub::getAmpereForNode(uint8_t currentNode, uint8_t currentChannel) {
+    float ampere = 0.0;
+    // switch tca to current i2cNode port
+    tcaselect(i2cNodeList[currentNode].getTcaPort());
+    if(currentChannel >= 0 && currentChannel < i2cNodeList[currentNode].getAdcCount()) {
+        // get milliampere values from current i2cNode adc channel
+        ampere = i2cNodeList[currentNode].getAmpereForInput(currentChannel);
+    }
+    return ampere;
 }
 
 const float i2cHub::getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel) {
@@ -101,6 +130,7 @@ void i2cHub::runButtons() {
         for(uint8_t index=0; index < this->_numberOfNodes; index++) {
             if(expander.digitalRead(pcfPwrButton[index])) {
                 expander.toggle(pcfPwrOutput[index]);
+                //pcfPwrOutputState[index] = 
             }
         }
         this->btnMillisStart = this->btnMillisLast;
