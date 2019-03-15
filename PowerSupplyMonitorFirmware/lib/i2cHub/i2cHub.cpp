@@ -79,7 +79,7 @@ const float i2cHub::getMilliAmpereForNode(uint8_t currentNode, uint8_t currentCh
     tcaselect(i2cNodeList[currentNode].getTcaPort());
     if(currentChannel >= 0 && currentChannel < i2cNodeList[currentNode].getAdcCount()) {
         // get milliampere values from current i2cNode adc channel
-        milliAmpere = i2cNodeList[currentNode].getMilliAmpereForInput(currentChannel);
+        milliAmpere = i2cNodeList[currentNode].getAmpereForInput(currentChannel);
     }
     return milliAmpere;
 }

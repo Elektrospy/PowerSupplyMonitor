@@ -35,11 +35,6 @@ float i2cNode::getAmpereForInput(uint8_t adcIndex=0) {
     return this->_calculateAmpereFromRaw(this->_getRaw(adcIndex));
 }
 
-float i2cNode::getMilliAmpereForInput(uint8_t adcIndex=0) {
-    return this->_calculateMilliAmpereFromRaw(this->_getRaw(adcIndex));
-}
-
-
 // Private methods
 uint16_t i2cNode::_getRaw(uint8_t adcIndex) {
     return this->_ads.readADC_SingleEnded(adcIndex);
@@ -47,18 +42,12 @@ uint16_t i2cNode::_getRaw(uint8_t adcIndex) {
 
 float i2cNode::_calculateAmpereFromRaw(uint16_t adcValue=0) {
     float ampere = 0;
-    const float ampereScaler = 0.001;
-    ampere = this->_calculateMilliAmpereFromRaw(adcValue) * ampereScaler;
-    return ampere;
-}
-
-float i2cNode::_calculateMilliAmpereFromRaw(uint16_t adcValue=0) {
-    float milliampere = 0;
-    // 05A: (.0264 * adcValue -13.51) 
-    // 20A: (.19 * adcValue -25) 
-    // 30A. (.044 * adcValue -3.78)
+    // arduino 10-bit scaling
+    // 05A: (.0264 * adcValue - 13.51) 
+    // 20A: (.19 * adcValue - 25) 
+    // 30A. (.044 * adcValue - 3.78)
     if(adcValue != 0) {
-        milliampere = (.044 * adcValue - 3.78);
+        ampere = (2.5f - adcValue * 0.003) / 0.066f;
     }
-    return milliampere;
+    return ampere;
 }

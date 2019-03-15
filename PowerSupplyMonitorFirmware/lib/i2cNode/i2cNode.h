@@ -13,7 +13,6 @@ public:
 	uint8_t getAdcCount();
 	uint16_t getRawInput(uint8_t adcIndex);
 	float getAmpereForInput(uint8_t adcIndex);
-	float getMilliAmpereForInput(uint8_t adcIndex);
 
 private:
 	uint16_t _numberOfProbes;
@@ -23,7 +22,6 @@ private:
 
 	uint16_t _getRaw(uint8_t adcIndex);
 	float _calculateAmpereFromRaw(uint16_t adcValue);
-	float _calculateMilliAmpereFromRaw(uint16_t adcValue);
 };
 
 #endif
