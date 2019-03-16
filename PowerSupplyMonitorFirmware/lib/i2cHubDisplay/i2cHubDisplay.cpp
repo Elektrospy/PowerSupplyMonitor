@@ -47,8 +47,8 @@ void i2cHubDisplay::_frameDashboard() {
             currentNode, 
             this->_nodeHub->getInputState(currentNode),
             this->_nodeHub->getOutputState(currentNode),
-            this->_nodeHub->getAmpereForNode(currentNode, 2), 
-            this->_nodeHub->getAmpereForNode(currentNode, 3));
+            this->_nodeHub->getAmpereForNode(currentNode, 3), 
+            this->_nodeHub->getAmpereForNode(currentNode, 2));
         this->_oledDisplay.drawStr(0, txtSpace * currentNode, buffer);
     }
 }
