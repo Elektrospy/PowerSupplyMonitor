@@ -34,6 +34,7 @@ private:
 	void _frameMenu();
 	void _frameDashboard();
 	void _frameBigAmpere();
+	void _frameAdcRaw();
 	void _frameEthernet();
 };
 

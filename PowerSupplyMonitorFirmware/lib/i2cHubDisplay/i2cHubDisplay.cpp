@@ -3,7 +3,7 @@
 i2cHubDisplay::i2cHubDisplay(i2cHub *nodeHub) : 
     _oledDisplay(U8G2_R0, U8X8_PIN_NONE) {
     this->_nodeHub = nodeHub;
-    this->_dashboardMax = 3;
+    this->_dashboardMax = 4;
     this->_dashboardCurrentIndex = 0;
     this->_btnMillisPeriod = 500;
 }
@@ -76,7 +76,8 @@ void i2cHubDisplay::_frameDraw() {
     switch(this->_dashboardCurrentIndex) {
         case 0: this->_frameBigAmpere(); break;
         case 1: this->_frameDashboard(); break;
-        case 2: this->_frameEthernet(); break;
+        case 2: this->_frameAdcRaw(); break;
+        case 3: this->_frameEthernet(); break;
     }
     // draw circle menu on bottom
     this->_frameMenu();
@@ -115,7 +116,6 @@ void i2cHubDisplay::_frameBigAmpere() {
     const uint8_t barFrameStartY = 32;
     const uint8_t barFrameWidth = this->_oledDisplay.getDisplayWidth();
     const uint8_t barFrameHeight = 11;
-    const uint8_t barFrameCorner = 3;
     const float ampereMax = 180.0f;
     // progess bar frame
     this->_oledDisplay.drawFrame(startX, barFrameStartY, barFrameWidth, barFrameHeight);
@@ -130,11 +130,19 @@ void i2cHubDisplay::_frameBigAmpere() {
         startX = this->_oledDisplay.getDisplayWidth() - progressWidth;
     }
     this->_oledDisplay.drawBox(startX, barFrameStartY, progressWidth, barFrameHeight);
+}
 
-    // debugging print
-    sniprintf(buffer, sizeof(buffer), "%d", progressWidth);
-    this->_oledDisplay.setFont(u8g2_font_t0_11_mf);
-    this->_oledDisplay.drawStr(0, barFrameStartY + barFrameHeight, buffer);
+void i2cHubDisplay::_frameAdcRaw() {
+    const int txtSpace = 10;
+    const uint8_t nodeCount = this->_nodeHub->getNodeCount();
+    for(uint8_t currentNode=0; currentNode < nodeCount; currentNode++) {
+        char buffer[128];
+        sniprintf(buffer, sizeof(buffer), "%d: % 5.f | % 5.f",
+            currentNode,
+            this->_nodeHub->getRawForNode(currentNode, 3), 
+            this->_nodeHub->getRawForNode(currentNode, 2));
+        this->_oledDisplay.drawStr(0, txtSpace * currentNode, buffer);
+    }
 }
 
 void i2cHubDisplay::_frameEthernet() {

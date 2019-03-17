@@ -2,6 +2,8 @@
 
 const uint8_t numberOfNodes = 5;
 i2cNode i2cNodeList[numberOfNodes];
+// hall sensor drift correction values
+const int16_t i2cNodeAdcDrift[numberOfNodes][2] = {{-3,-4},{-2, -1},{-2,-1},{18,18},{3,3}};
 // pcf i2c expander configuration
 const uint8_t pcfPwrInput[numberOfNodes] = {1, 3, 5, 7, 9};
 const uint8_t pcfPwrOutput[numberOfNodes] = {0, 2, 4, 6, 8};
@@ -23,9 +25,13 @@ i2cHub::~i2cHub() {
 }
 
 void i2cHub::init() {
+    uint8_t nodeLeft = 3;
+    uint8_t nodeRight = 2;
     // init nodes
     for(uint8_t currentNode=0; currentNode < this->_numberOfNodes; currentNode++) {
         i2cNodeList[currentNode].init();
+        i2cNodeList[currentNode].setAdcDrift(i2cNodeAdcDrift[currentNode][0], nodeLeft);
+        i2cNodeList[currentNode].setAdcDrift(i2cNodeAdcDrift[currentNode][1], nodeRight);
     }
     initExpander();
 }
@@ -60,6 +66,17 @@ const bool i2cHub::getOutputState(uint8_t currentNode=0) {
         outputState = true;
     }
     return outputState;
+}
+
+const float i2cHub::getRawForNode(uint8_t currentNode, uint8_t currentChannel) {
+    float ampere = 0.0;
+    // switch tca to current i2cNode port
+    tcaselect(i2cNodeList[currentNode].getTcaPort());
+    if(currentChannel >= 0 && currentChannel < i2cNodeList[currentNode].getAdcCount()) {
+        // get milliampere values from current i2cNode adc channel
+        ampere = i2cNodeList[currentNode].getRawInput(currentChannel);
+    }
+    return ampere;
 }
 
 const float i2cHub::getAmpereForNode(uint8_t currentNode, uint8_t currentChannel) {
