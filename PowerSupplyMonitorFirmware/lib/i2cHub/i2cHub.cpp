@@ -2,7 +2,7 @@
 
 const uint8_t numberOfNodes = 5;
 i2cNode i2cNodeList[numberOfNodes];
-// hall sensor drift correction values
+// hall sensor drift correction values, ~834 is adc middle
 const int16_t i2cNodeAdcDrift[numberOfNodes][2] = {{-3,-4},{-2, -1},{-2,-1},{18,18},{3,3}};
 // pcf i2c expander configuration
 const uint8_t pcfPwrInput[numberOfNodes] = {1, 3, 5, 7, 9};
