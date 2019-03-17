@@ -16,16 +16,25 @@ public:
 	void init();
 	void run();
     
-
 private:
 	i2cHub* _nodeHub;
 	U8G2_SSD1306_128X64_NONAME_F_HW_I2C _oledDisplay;
 	uint8_t _dashboardCurrentIndex;
+	uint8_t _dashboardNum;
+	uint8_t _dashboardMax;
+	// display button timing stuff
+	unsigned long _btnMillisPeriod;
+	unsigned long _btnMillisStart;
+	unsigned long _btnMillisLast;
 
+	void _checkDisplayButton();
+	void _nextDashboard();
 	void _framePrepare();
 	void _frameDraw();
-	void _frameHello();
+	void _frameMenu();
 	void _frameDashboard();
+	void _frameBigAmpere();
+	void _frameEthernet();
 };
 
 #endif

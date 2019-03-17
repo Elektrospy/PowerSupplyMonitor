@@ -2,6 +2,7 @@
 #include "i2cHub.h"
 #include "i2cHubDebug.h"
 #include "i2cHubDisplay.h"
+#define DEBUG false
 
 // Arduino 328p, SDA: A4, SCL: A5
 // ESP8266, SDA: D1, SCL: D2
@@ -10,8 +11,10 @@
 const unsigned long serialBautrate = 115200;
 const uint32_t i2cClockSpeed = 400000;
 i2cHub nodeHub = i2cHub();
-i2cHubDebug nodeHubDebug = i2cHubDebug(&nodeHub);
 i2cHubDisplay nodeHubDisplay = i2cHubDisplay(&nodeHub);
+#if DEBUG
+i2cHubDebug nodeHubDebug = i2cHubDebug(&nodeHub);
+#endif
 
 void setup() {
     Serial.begin(serialBautrate);
@@ -27,7 +30,9 @@ void setup() {
 
 void loop() {
     nodeHub.run();
-    nodeHubDebug.debugNodePrint();
-    //nodeHubDebug.debugNodePowerSupplys();
     nodeHubDisplay.run();
+    #if DEBUG
+    nodeHubDebug.debugNodePrint();
+    nodeHubDebug.debugNodePowerSupplys();
+    #endif
 }    

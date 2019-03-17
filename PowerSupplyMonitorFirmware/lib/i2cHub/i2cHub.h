@@ -19,6 +19,7 @@ public:
 	const float getMilliAmpereForNode(uint8_t currentNode, uint8_t currentChannel);
 	const void activatePowerSupply(uint8_t nodeIndex);
 	const void deactivatePowerSupply(uint8_t nodeIndex);
+	const bool getDisplayButtonState();
 
 private:
 	// tca default address

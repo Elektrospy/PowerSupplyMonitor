@@ -92,6 +92,10 @@ const void i2cHub::deactivatePowerSupply(uint8_t nodeIndex) {
     expander.digitalWrite(pcfPwrOutput[nodeIndex], 0);
 }
 
+const bool i2cHub::getDisplayButtonState() {
+    return expander.digitalRead(pcfDisplayBtn);
+}
+
 // private methods
 void i2cHub::initNodes() {
 	for(uint8_t currentNode=0; currentNode < numberOfNodes; currentNode++) {
@@ -130,7 +134,6 @@ void i2cHub::runButtons() {
         for(uint8_t index=0; index < this->_numberOfNodes; index++) {
             if(expander.digitalRead(pcfPwrButton[index])) {
                 expander.toggle(pcfPwrOutput[index]);
-                //pcfPwrOutputState[index] = 
             }
         }
         this->btnMillisStart = this->btnMillisLast;
