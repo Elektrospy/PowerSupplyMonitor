@@ -16,6 +16,8 @@ i2cNode::~i2cNode() {
 }
 
 void i2cNode::init() {
+    // set gain for an input range of +/- 6.144V, default: +/-4.096V
+    this->_ads.setGain(GAIN_TWOTHIRDS);
     this->_ads.begin();
 }
 

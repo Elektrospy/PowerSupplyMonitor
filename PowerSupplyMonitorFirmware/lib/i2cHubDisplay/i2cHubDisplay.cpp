@@ -99,12 +99,6 @@ void i2cHubDisplay::_frameDashboard() {
 void i2cHubDisplay::_frameBigAmpere() {
     float bigAmpere = 0.0;
     const uint8_t nodeCount = this->_nodeHub->getNodeCount();
-    // progressbar config
-    const uint8_t startX = 0;
-    const uint8_t barFrameStartY = 32;
-    const uint8_t barFrameWidth = this->_oledDisplay.getDisplayWidth();
-    const uint8_t barFrameHeight = 11;
-    const uint8_t barFrameCorner = 3;
 
     for(uint8_t currentNode=0; currentNode < nodeCount; currentNode++) {
         bigAmpere += this->_nodeHub->getAmpereForNode(currentNode, 3);
@@ -116,12 +110,31 @@ void i2cHubDisplay::_frameBigAmpere() {
     sniprintf(buffer, sizeof(buffer), "% 5.1fA", bigAmpere);
     this->_oledDisplay.drawStr(0, 0, buffer);
 
-    // progess bar frame
-    this->_oledDisplay.drawRFrame(startX, barFrameStartY, barFrameWidth, barFrameHeight, barFrameCorner);
-    
+    // progress bar config
+    uint8_t startX = 0;
+    const uint8_t barFrameStartY = 32;
+    const uint8_t barFrameWidth = this->_oledDisplay.getDisplayWidth();
+    const uint8_t barFrameHeight = 11;
+    const uint8_t barFrameCorner = 3;
     const float ampereMax = 180.0f;
-    uint8_t progressWidth = constrain(map(bigAmpere, 0.0f, ampereMax, 0, barFrameWidth), 0, barFrameWidth);
-    this->_oledDisplay.drawRBox(startX, barFrameStartY, progressWidth, barFrameHeight, barFrameCorner);
+    // progess bar frame
+    this->_oledDisplay.drawFrame(startX, barFrameStartY, barFrameWidth, barFrameHeight);
+    // progress bar itself
+    uint8_t progressWidth = 0;
+    if(bigAmpere >= 0.0f) {
+        // positive progress bar
+        progressWidth = constrain(map(bigAmpere, 0.0f, ampereMax, 0, barFrameWidth), 0, barFrameWidth);
+    } else {
+        // negative progress bar
+        progressWidth = constrain(map(bigAmpere, 0.0f, -ampereMax, 0, barFrameWidth), 0, barFrameWidth);
+        startX = this->_oledDisplay.getDisplayWidth() - progressWidth;
+    }
+    this->_oledDisplay.drawBox(startX, barFrameStartY, progressWidth, barFrameHeight);
+
+    // debugging print
+    sniprintf(buffer, sizeof(buffer), "%d", progressWidth);
+    this->_oledDisplay.setFont(u8g2_font_t0_11_mf);
+    this->_oledDisplay.drawStr(0, barFrameStartY + barFrameHeight, buffer);
 }
 
 void i2cHubDisplay::_frameEthernet() {
